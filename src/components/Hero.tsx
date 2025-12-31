@@ -47,9 +47,11 @@ export function Hero() {
               transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
             >
               <div className="w-32 h-32 mx-auto rounded-full bg-gradient-to-br from-blue-500 to-purple-600 p-1">
-                <div className="w-full h-full rounded-full bg-slate-800 flex items-center justify-center">
-                  <span className="text-blue-400">👨‍💻</span>
-                </div>
+                <img
+                  src="/hadi-kashlan.png"
+                  alt="Hadi Kashlan"
+                  className="w-full h-full rounded-full object-cover"
+                />
               </div>
             </motion.div>
 
@@ -59,18 +61,18 @@ export function Hero() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3, duration: 0.8 }}
             >
-              Senior Full Stack Developer
+              Senior Full Stack & Mobile Architect
             </motion.h1>
 
             <motion.p
-              className="text-slate-300 mb-8 max-w-2xl mx-auto"
+              className="text-slate-300 mb-8 max-w-2xl mx-auto text-lg"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4, duration: 0.8 }}
             >
-              With over <span className="text-blue-400">23 years of experience</span> in crafting robust,
-              scalable solutions across the full technology stack. Transforming complex challenges
-              into elegant, user-centric applications.
+              With over <span className="text-blue-400 font-semibold">23 years of expertise</span>, I architect and deliver
+              scalable, high-performance solutions. Specializing in enterprise-grade web systems
+              and seamless <span className="text-purple-400 font-semibold">hybrid mobile experiences</span>.
             </motion.p>
 
             <motion.div

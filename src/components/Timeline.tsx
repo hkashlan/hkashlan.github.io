@@ -5,7 +5,7 @@ import { Building2, Calendar, Briefcase, Award } from 'lucide-react';
 const experiences = [
   {
     company: 'Akelius Technology',
-    role: 'Senior Developer',
+    role: 'Senior Full Stack & Mobile Architect',
     period: 'May 2019 - Present',
     duration: '7+ years',
     description: 'Building enterprise-scale solutions',
