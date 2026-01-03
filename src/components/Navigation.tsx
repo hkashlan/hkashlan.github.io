@@ -41,7 +41,7 @@ export function Navigation() {
 						className="text-white z-50"
 						whileHover={{ scale: 1.05 }}
 					>
-						{"<Developer />"}
+						{"<Senior Full Stack Developer />"}
 					</motion.a>
 
 					{/* Desktop Navigation */}

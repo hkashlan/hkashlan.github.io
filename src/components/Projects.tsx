@@ -2,29 +2,44 @@ import { ExternalLink, Github } from "lucide-react";
 import { motion } from "motion/react";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 
-const projects = [
+type Project = {
+	title: string;
+	description: string;
+	image: string;
+	tags: string[];
+	githubUrl?: string;
+	liveUrl?: string;
+};
+
+const projects: Project[] = [
 	{
-		title: "Enterprise SaaS Platform",
+		title: "Hadi Kashlan Profile",
 		description:
-			"Led the architecture and development of a multi-tenant SaaS platform serving 10,000+ users. Built with microservices architecture, handling 1M+ requests daily.",
-		image:
-			"https://images.unsplash.com/photo-1582138825658-fb952c08b282?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxkZXZlbG9wZXIlMjB3b3Jrc3BhY2UlMjBjb2RlfGVufDF8fHx8MTc2NDQyODc4OHww&ixlib=rb-4.1.0&q=80&w=1080",
-		tags: ["React", "Node.js", "PostgreSQL", "AWS", "Kubernetes"],
-		githubUrl: "#",
-		liveUrl: "#",
+			"This is my personal website built with Tanstack and DaisyUI. It features a modern and responsive design, with a focus on accessibility and performance.",
+		image: "/hadi-kashlan-profile.png",
+		tags: [
+			"Tanstack",
+			"React",
+			"DaisyUI",
+			"TypeScript",
+			"Tailwind CSS",
+			"Vite",
+			"Figma",
+		],
+		githubUrl: "https://github.com/hkashlan/hkashlan.github.io/",
+		liveUrl: "https://hkashlan.github.io/",
 	},
 	{
-		title: "Real-time Analytics Dashboard",
+		title: "Akelius My Day",
 		description:
-			"Developed a high-performance analytics platform with real-time data visualization, processing millions of events per hour with sub-second latency.",
-		image:
-			"https://images.unsplash.com/photo-1644088379091-d574269d422f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxhYnN0cmFjdCUyMHRlY2hub2xvZ3klMjBuZXR3b3JrfGVufDF8fHx8MTc2NDQ0NDMzOXww&ixlib=rb-4.1.0&q=80&w=1080",
-		tags: ["TypeScript", "GraphQL", "Redis", "WebSocket", "D3.js"],
-		githubUrl: "#",
-		liveUrl: "#",
+			"The essential tool for property managers and maintenance teams. Efficiently conduct inspections, document conditions with photos, and manage work orders in one organized interface.",
+		image: "/akelius-my-day.png",
+		tags: ["Angular", "TypeScript", "Capacitorjs", "Capgo"],
+		liveUrl:
+			"https://play.google.com/store/apps/details?id=com.akelius.myday.prod",
 	},
 	{
-		title: "Mobile Banking Application",
+		title: "Hadi Kashlan CV",
 		description:
 			"Architected and built a secure mobile banking app with biometric authentication, supporting iOS and Android with 4.8+ star rating.",
 		image:
@@ -120,20 +135,28 @@ export function Projects() {
 								</div>
 
 								<div className="flex gap-3">
-									<a
-										href={project.githubUrl}
-										className="flex items-center gap-2 text-slate-600 hover:text-blue-600 transition-colors text-sm"
-									>
-										<Github className="w-4 h-4" />
-										<span>Code</span>
-									</a>
-									<a
-										href={project.liveUrl}
-										className="flex items-center gap-2 text-slate-600 hover:text-blue-600 transition-colors text-sm"
-									>
-										<ExternalLink className="w-4 h-4" />
-										<span>Live Demo</span>
-									</a>
+									{project.githubUrl && project.githubUrl !== "#" && (
+										<a
+											href={project.githubUrl}
+											target="_blank"
+											rel="noopener noreferrer"
+											className="flex items-center gap-2 text-slate-600 hover:text-blue-600 transition-colors text-sm"
+										>
+											<Github className="w-4 h-4" />
+											<span>Code</span>
+										</a>
+									)}
+									{project.liveUrl && project.liveUrl !== "#" && (
+										<a
+											href={project.liveUrl}
+											target="_blank"
+											rel="noopener noreferrer"
+											className="flex items-center gap-2 text-slate-600 hover:text-blue-600 transition-colors text-sm"
+										>
+											<ExternalLink className="w-4 h-4" />
+											<span>Live Demo</span>
+										</a>
+									)}
 								</div>
 							</div>
 						</motion.div>

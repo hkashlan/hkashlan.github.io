@@ -2,20 +2,59 @@ import { Award, Briefcase, Calendar } from "lucide-react";
 import { motion, useScroll, useTransform } from "motion/react";
 import { useRef } from "react";
 
-const experiences = [
+type Experience = {
+	company: { name: string; url?: string };
+	role: string;
+	period: string;
+	duration: string;
+	description: string;
+	projects: Array<{ url?: string; text: string; skills: string[] }>;
+	skills: string[];
+	achievements: string[];
+	color: string;
+};
+
+const experiences: Experience[] = [
 	{
-		company: "Akelius Technology",
+		company: {
+			name: "Akelius Technology",
+			url: "https://www.linkedin.com/company/akelius-technology",
+		},
 		role: "Senior Full Stack & Mobile Architect",
-		period: "May 2019 - Present",
+		period: "April 2019 - Present",
 		duration: "7+ years",
-		description: "Building enterprise-scale solutions",
+		description: "Building in-house enterprise-scale solutions",
 		projects: [
-			"Customer Management System",
-			"Inspection Application (Mobile based on Capacitorjs)",
-			'<a href="https://play.google.com/store/apps/details?id=com.akelius.mypages.prod&utm_source=emea_Med">Tenant Application</a>',
-			"Rent Application",
-			"Apartment Management System",
-			"Akelius Website",
+			{ text: "Customer Management System", skills: ["Angular"] },
+			{
+				url: "https://play.google.com/store/apps/details?id=com.akelius.mypages.prod",
+				text: "Tenant Application",
+				skills: ["Angular", "Capacitorjs", "GraphQL"],
+			},
+			{
+				url: "https://play.google.com/store/apps/details?id=com.akelius.myday.prod",
+				text: "Inspection Application (Mobile based on Capacitorjs)",
+				skills: ["Angular", "Capacitorjs", "GraphQL"],
+			},
+			{ text: "Rent Application", skills: ["Angular", "GraphQL"] },
+			{
+				url: "http://rent.akelius.com/",
+				text: "Apartment Management System",
+				skills: ["Angular"],
+			},
+			{
+				url: "http://akelius.com/",
+				text: "Akelius Website",
+				skills: [
+					"Angular",
+					"React",
+					"Strapi",
+					"MongoDB",
+					"PostgreSQL",
+					"Terraform",
+					"Azure",
+				],
+			},
 		],
 		skills: [
 			"Angular",
@@ -41,89 +80,101 @@ const experiences = [
 		color: "from-blue-500 to-cyan-500",
 	},
 	{
-		company: "FinanceNet Solutions",
-		role: "Senior Full Stack Developer",
-		period: "2015 - 2020",
-		duration: "5 years",
-		description:
-			"Developed secure financial applications and payment processing systems",
-		projects: [
-			"Mobile banking app with 4.8★ rating",
-			"Real-time fraud detection system",
-			"Cryptocurrency trading platform",
-		],
-		skills: ["React Native", "Python", "Django", "MongoDB", "Redis", "Docker"],
-		achievements: [
-			"Processed $2B+ in transactions",
-			"Zero security breaches",
-			"PCI DSS compliance certification",
-		],
+		company: {
+			name: "Crealytics",
+			url: "https://www.linkedin.com/company/crealytics",
+		},
+		role: "Frontend Developer",
+		period: "October 2018 - March 2019",
+		duration: "6 Months",
+		description: "Building Advertising Bidding platform using",
+		projects: [],
+		skills: ["React"],
+		achievements: ["Building Advertising Bidding platform using"],
 		color: "from-purple-500 to-pink-500",
 	},
 	{
-		company: "E-Commerce Ventures",
-		role: "Full Stack Developer",
-		period: "2010 - 2015",
-		duration: "5 years",
+		company: {
+			name: "Ladenzeile",
+			url: "https://www.linkedin.com/company/ladenzeile-gmbh/",
+		},
+		role: "Senior Frontend Developer",
+		period: "June 2015 - September 2019",
+		duration: "4 Years",
 		description:
-			"Built scalable e-commerce platforms and inventory management systems",
-		projects: [
-			"Multi-vendor marketplace platform",
-			"Advanced recommendation engine",
-			"Real-time inventory tracking system",
-		],
+			"Visual Meta operates comparison shopping portals under the brands LadenZeile and ShopAlike across Europe, aggregating millions of offers from various online retailers. ",
+		projects: [],
 		skills: [
-			"Vue.js",
-			"Java",
-			"Spring Boot",
-			"MySQL",
-			"Elasticsearch",
-			"RabbitMQ",
+			"JSP",
+			"HTML",
+			"CSS",
+			"JavaScript",
+			"jQuery",
+			"Angular",
+			"Jenkins",
+			"Docker",
+			"Docker Compose",
+			"Kubernetes",
+			"Bitbucket",
+			"Git",
+			"Jira",
+			"Confluence",
 		],
 		achievements: [
-			"Handled 100K+ daily orders",
-			"Reduced cart abandonment by 35%",
-			"Increased conversion rate by 50%",
+			"Moving to microservices architecture",
+			"Moving to new Technologies Kubernetes + Docker",
+			"keep the legacy JSP application system working and migrating to Angular",
 		],
 		color: "from-orange-500 to-red-500",
 	},
 	{
-		company: "Digital Media Corp",
-		role: "Web Developer",
-		period: "2005 - 2010",
-		duration: "5 years",
+		company: {
+			name: "Mobinets GmbH",
+			url: "https://www.linkedin.com/company/mobinets/",
+		},
+		role: "Team Lead",
+		period: "July 2013 – June 2015",
+		duration: "2 Years",
 		description:
-			"Created content management systems and media streaming platforms",
-		projects: [
-			"Video streaming platform",
-			"Custom CMS for major publications",
-			"Social media integration tools",
-		],
-		skills: ["JavaScript", "PHP", "MySQL", "jQuery", "WordPress", "Apache"],
-		achievements: [
-			"10M+ monthly active users",
-			'Won "Best Digital Platform" award',
-			"Featured in Tech Magazine",
-		],
+			"Mobinets provides next-generation OSS (Operations Support Systems) software solutions designed to automate, consolidate, and optimize telecom network operations for global service providers.",
+		projects: [],
+		skills: ["Java", "Oracle (11g)", "SVN", "GIT", "SVN"],
+		achievements: ["Manage team.", "Using Java for building OSS"],
 		color: "from-green-500 to-emerald-500",
 	},
 	{
-		company: "StartUp Innovations",
-		role: "Junior Developer",
-		period: "2002 - 2005",
-		duration: "3 years",
+		company: {
+			name: "Softnet",
+		},
+		role: "Team Lead",
+		period: "March 2003 – June 2005, July 2007 – June 2013",
+		duration: "8 Years",
 		description:
-			"Started career building web applications and learning full stack development",
+			"Building a billing system for a water companies and electricity companies.",
 		projects: [
-			"Corporate website builder",
-			"Email marketing automation tool",
-			"Customer relationship management system",
+			{ text: "Water Billing System", skills: ["Java", "SVN", "GIT"] },
+			{ text: "Electricity Billing System", skills: ["Java", "SVN", "GIT"] },
 		],
-		skills: ["HTML", "CSS", "JavaScript", "ASP.NET", "SQL Server", "C#"],
+		skills: [
+			"JAVA",
+			"Java Persisteence API",
+			"Hibernetate ORM",
+			"J2EE",
+			"Swing",
+			"Applet",
+			"JSP",
+			"JBoss",
+			"Oracle (10g, 11G)",
+			"MySQL",
+			"JasperReports",
+			"iReport Designer",
+			"SVN",
+			"CSV",
+		],
 		achievements: [
-			"Built first production app",
-			"Promoted to full developer in 1 year",
-			"Completed Microsoft certification",
+			"Building first version of the billing system using Swing + Applet",
+			"Migrating to web using JSF",
+			"keep the tools updated",
 		],
 		color: "from-indigo-500 to-blue-500",
 	},
@@ -190,11 +241,7 @@ export function Timeline() {
 								whileInView={{ opacity: 1, y: 0 }}
 								viewport={{ once: true, margin: "-100px" }}
 								transition={{ delay: index * 0.2, duration: 0.6 }}
-								className={`relative ${
-									index % 2 === 0
-										? "lg:pr-1/2 lg:pl-0"
-										: "lg:pl-1/2 lg:pr-0 lg:text-right"
-								}`}
+								className={`relative lg:pr-1/2 lg:pl-0`}
 							>
 								{/* Timeline Dot */}
 								<div className="absolute left-1/2 transform -translate-x-1/2 -translate-y-4 hidden lg:block z-20">
@@ -227,27 +274,14 @@ export function Timeline() {
 
 										{/* Header */}
 										<div className="mb-6">
-											<div className="flex items-start gap-4 mb-3">
-												<div
-													className={`w-14 h-14 rounded-xl bg-white ${exp.color} flex items-center justify-center flex-shrink-0 shadow-lg`}
-													style={{ transform: "translateZ(20px)" }}
-												>
-													{/* <Building2 className="w-7 h-7 text-white" /> */}
-													<img
-														src="https://akelius.com/assets/img/akelius_logo.svg"
-														alt="Akelius Logo"
-														className="w-7 h-7 text-white"
-													/>
-												</div>
-												<div className="flex-1">
-													<h3 className="text-white mb-1">{exp.company}</h3>
-													<p className="text-slate-300">{exp.role}</p>
-													<div className="flex items-center gap-2 mt-2 text-sm text-slate-400">
-														<Calendar className="w-4 h-4" />
-														<span>{exp.period}</span>
-														<span className="text-slate-600">•</span>
-														<span>{exp.duration}</span>
-													</div>
+											<div className="mb-4">
+												<h3 className="text-white mb-1">{exp.company.name}</h3>
+												<p className="text-slate-300 font-medium">{exp.role}</p>
+												<div className="flex items-center gap-2 mt-2 text-sm text-slate-400">
+													<Calendar className="w-4 h-4" />
+													<span>{exp.period}</span>
+													<span className="text-slate-600">•</span>
+													<span>{exp.duration}</span>
 												</div>
 											</div>
 											<p className="text-slate-400 text-sm">
@@ -264,11 +298,23 @@ export function Timeline() {
 											<ul className="space-y-2">
 												{exp.projects.map((project) => (
 													<li
-														key={project}
+														key={`${project.text}`}
 														className="text-slate-300 text-sm flex items-start gap-2"
 													>
-														<span className="text-blue-400 mt-1">▹</span>
-														<span>{project}</span>
+														<span className="text-blue-400">▹</span>
+														<span className="[&_a]:text-blue-400 [&_a]:font-medium [&_a]:underline [&_a]:underline-offset-4 [&_a]:decoration-blue-400/30 hover:[&_a]:decoration-blue-400 hover:[&_a]:text-blue-300 transition-all [&_a:after]:content-['_↗'] [&_a:after]:ml-0.5 [&_a:after]:text-xs [&_a:after]:opacity-70">
+															{project.url ? (
+																<a
+																	href={project.url}
+																	target="_blank"
+																	rel="noopener noreferrer"
+																>
+																	{project.text}
+																</a>
+															) : (
+																project.text
+															)}
+														</span>
 													</li>
 												))}
 											</ul>

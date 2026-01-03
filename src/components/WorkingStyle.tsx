@@ -10,6 +10,7 @@ import {
 	Zap,
 } from "lucide-react";
 import { motion } from "motion/react";
+import { linkedInInfo } from "@/config";
 
 const qualities = [
 	{
@@ -102,9 +103,20 @@ export function WorkingStyle() {
 					className="text-center mb-16"
 				>
 					<h2 className="mb-4 text-slate-900">How I Work</h2>
-					<p className="text-slate-600 max-w-2xl mx-auto">
+					<p className="text-slate-600 max-w-2xl mx-auto mb-8">
 						What colleagues and collaborators say about working with me
 					</p>
+					<motion.a
+						href={`${linkedInInfo.url}details/recommendations/`}
+						target="_blank"
+						rel="noopener noreferrer"
+						whileHover={{ scale: 1.05 }}
+						whileTap={{ scale: 0.95 }}
+						className="inline-flex items-center gap-2 px-6 py-3 bg-[#0077b5] text-white rounded-full text-sm font-semibold hover:bg-[#0071ad] transition-all shadow-md hover:shadow-lg"
+					>
+						<Linkedin className="w-5 h-5" />
+						View LinkedIn Recommendations
+					</motion.a>
 				</motion.div>
 
 				{/* Main Testimonial Card */}
@@ -183,17 +195,19 @@ export function WorkingStyle() {
 										Design Collaboration Partner
 									</div>
 								</div>
-								<motion.a
-									href="https://www.linkedin.com/in/hadikashlan/details/recommendations"
-									target="_blank"
-									rel="noopener noreferrer"
-									whileHover={{ scale: 1.05 }}
-									whileTap={{ scale: 0.95 }}
-									className="flex items-center gap-2 px-4 py-2 bg-[#0077b5]/10 text-[#0077b5] rounded-full text-sm font-medium hover:bg-[#0077b5]/20 transition-colors"
-								>
-									<Linkedin className="w-4 h-4" />
-									View on LinkedIn
-								</motion.a>
+								<div className="hidden md:block">
+									<motion.a
+										href={`${linkedInInfo.url}details/recommendations/`}
+										target="_blank"
+										rel="noopener noreferrer"
+										whileHover={{ scale: 1.05 }}
+										whileTap={{ scale: 0.95 }}
+										className="flex items-center gap-2 px-4 py-2 bg-[#0077b5]/10 text-[#0077b5] rounded-full text-sm font-medium hover:bg-[#0077b5]/20 transition-colors"
+									>
+										<Linkedin className="w-4 h-4" />
+										LinkedIn
+									</motion.a>
+								</div>
 							</div>
 						</div>
 
@@ -254,9 +268,10 @@ export function WorkingStyle() {
 
 										{/* Content */}
 										<h4 className="text-slate-900 mb-2">{quality.title}</h4>
-										<p className="text-slate-600 text-sm leading-relaxed">
-											{quality.description}
-										</p>
+										<p
+											className="text-slate-600 text-sm leading-relaxed"
+											dangerouslySetInnerHTML={{ __html: quality.description }}
+										/>
 
 										{/* Hover Glow Effect */}
 										<div

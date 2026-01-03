@@ -15,6 +15,7 @@ const skillCategories = [
 		skills: [
 			"React",
 			"Angular",
+			"Tanstack",
 			"TypeScript",
 			"Tailwind CSS",
 			"Daisyui",
@@ -25,7 +26,7 @@ const skillCategories = [
 	{
 		title: "Backend Development",
 		icon: Server,
-		skills: ["Node.js", ".NET", "Express", "Python", "Java", "C#"],
+		skills: ["Node.js", "Tanstack", ".NET", "Express", "Python", "Java", "C#"],
 		color: "purple",
 	},
 	{
@@ -38,7 +39,6 @@ const skillCategories = [
 		title: "DevOps & Cloud",
 		icon: Layers,
 		skills: [
-			"AWS",
 			"Docker",
 			"Docker Compose",
 			"Kubernetes",
