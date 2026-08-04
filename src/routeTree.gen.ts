@@ -10,42 +10,32 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as PathlessLayoutIndexRouteImport } from './routes/_pathlessLayout/index'
-import { Route as PathlessLayoutRoutesRouteImport } from './routes/_pathlessLayout/routes'
 
 const PathlessLayoutIndexRoute = PathlessLayoutIndexRouteImport.update({
   id: '/_pathlessLayout/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PathlessLayoutRoutesRoute = PathlessLayoutRoutesRouteImport.update({
-  id: '/_pathlessLayout/routes',
-  path: '/routes',
-  getParentRoute: () => rootRouteImport,
-} as any)
 
 export interface FileRoutesByFullPath {
-  '/routes': typeof PathlessLayoutRoutesRoute
   '/': typeof PathlessLayoutIndexRoute
 }
 export interface FileRoutesByTo {
-  '/routes': typeof PathlessLayoutRoutesRoute
   '/': typeof PathlessLayoutIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/_pathlessLayout/routes': typeof PathlessLayoutRoutesRoute
   '/_pathlessLayout/': typeof PathlessLayoutIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/routes' | '/'
+  fullPaths: '/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/routes' | '/'
-  id: '__root__' | '/_pathlessLayout/routes' | '/_pathlessLayout/'
+  to: '/'
+  id: '__root__' | '/_pathlessLayout/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  PathlessLayoutRoutesRoute: typeof PathlessLayoutRoutesRoute
   PathlessLayoutIndexRoute: typeof PathlessLayoutIndexRoute
 }
 
@@ -58,18 +48,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PathlessLayoutIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_pathlessLayout/routes': {
-      id: '/_pathlessLayout/routes'
-      path: '/routes'
-      fullPath: '/routes'
-      preLoaderRoute: typeof PathlessLayoutRoutesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  PathlessLayoutRoutesRoute: PathlessLayoutRoutesRoute,
   PathlessLayoutIndexRoute: PathlessLayoutIndexRoute,
 }
 export const routeTree = rootRouteImport

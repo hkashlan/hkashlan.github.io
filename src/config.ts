@@ -1,5 +1,61 @@
 import { Coffee, FileText, Github, Linkedin, Mail } from "lucide-react";
 
+export const siteName = "Hadi Kashlan";
+export const siteRole = "Senior Full Stack & Mobile Architect";
+export const siteUrl = "https://hkashlan.github.io/";
+export const siteDescription =
+	"Hadi Kashlan is a senior full stack and mobile architect with 23+ years of experience building enterprise-scale web systems and hybrid mobile apps with Angular, React, TypeScript, Node.js and Capacitor, and driving AI-agentic development workflows.";
+
+/** Falkensee sits just outside Berlin — recruiters search for the metro area. */
+export const siteLocation = {
+	city: "Falkensee",
+	region: "Berlin metropolitan area",
+	country: "Germany",
+	countryCode: "DE",
+	label: "Falkensee · Berlin area, Germany",
+};
+
+export interface Degree {
+	degree: string;
+	field: string;
+	institution: string;
+	place: string;
+	period: string;
+	note?: string;
+}
+
+export const education: Degree[] = [
+	{
+		degree: "Master's degree",
+		field: "Computer Information Systems",
+		institution: "Arabic Academy for Banking and Financial Sciences",
+		place: "Damascus, Syria",
+		period: "September 2006 – July 2009",
+		note: "Overall grade: 82.4%",
+	},
+	{
+		degree: "Bachelor's degree",
+		field: "Software Engineering",
+		institution: "Damascus University",
+		place: "Damascus, Syria",
+		period: "September 1999 – June 2004",
+	},
+];
+
+export interface Language {
+	name: string;
+	level: string;
+	cefr: string;
+	/** Share of the proficiency bar to fill, 0–100. */
+	proficiency: number;
+}
+
+export const languages: Language[] = [
+	{ name: "Arabic", level: "Native", cefr: "C2", proficiency: 100 },
+	{ name: "English", level: "Very good", cefr: "C1", proficiency: 85 },
+	{ name: "German", level: "Good", cefr: "B1", proficiency: 55 },
+];
+
 interface SocialLink {
 	name: string;
 	icon: React.ComponentType<{ className?: string }>;

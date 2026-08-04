@@ -14,6 +14,9 @@ const config = defineConfig({
     }),
     tailwindcss(),
     tanstackStart({
+      sitemap: {
+        host: 'https://hkashlan.github.io',
+      },
       prerender: {
         // Enable prerendering
         enabled: true,

@@ -65,7 +65,10 @@ const qualities = [
 
 export function WorkingStyle() {
 	return (
-		<section className="py-20 bg-gradient-to-b from-white to-slate-50 relative overflow-hidden">
+		<section
+			id="working-style"
+			className="py-20 bg-gradient-to-b from-white to-slate-50 relative overflow-hidden"
+		>
 			{/* Decorative Background Elements */}
 			<div className="absolute inset-0 overflow-hidden pointer-events-none">
 				<motion.div
@@ -268,10 +271,9 @@ export function WorkingStyle() {
 
 										{/* Content */}
 										<h4 className="text-slate-900 mb-2">{quality.title}</h4>
-										<p
-											className="text-slate-600 text-sm leading-relaxed"
-											dangerouslySetInnerHTML={{ __html: quality.description }}
-										/>
+										<p className="text-slate-600 text-sm leading-relaxed">
+											{quality.description}
+										</p>
 
 										{/* Hover Glow Effect */}
 										<div

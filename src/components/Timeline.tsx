@@ -23,8 +23,13 @@ const experiences: Experience[] = [
 		role: "Senior Full Stack & Mobile Architect",
 		period: "April 2019 - Present",
 		duration: "7+ years",
-		description: "Building in-house enterprise-scale solutions",
+		description:
+			"Akelius is an international residential real-estate company registered in Sweden. Building in-house enterprise-scale solutions and driving the team's move to AI-agentic development.",
 		projects: [
+			{
+				text: "Custom CMS built on Strapi, replacing the legacy Java-based Hippo CMS",
+				skills: ["Strapi", "Node.js", "React", "PostgreSQL"],
+			},
 			{ text: "Customer Management System", skills: ["Angular"] },
 			{
 				url: "https://play.google.com/store/apps/details?id=com.akelius.mypages.prod",
@@ -57,25 +62,35 @@ const experiences: Experience[] = [
 			},
 		],
 		skills: [
+			"Claude Code",
+			"MCP",
 			"Angular",
 			"React",
 			"Strapi",
 			"TypeScript",
+			"Java",
+			"Ionic",
+			"Capacitorjs",
 			"Docker",
 			"Docker Compose",
 			"Kubernetes",
 			"Jenkins",
 			"Git",
 			"Node.js",
+			"Express.js",
 			"Azure",
 			"PostgreSQL",
 			"MongoDB",
 			"GraphQL",
 		],
 		achievements: [
+			"Driving adoption of AI-agentic workflows (Claude Code, custom agents, skills, MCP) to accelerate legacy migration work",
+			"Migrating the legacy Java-based Hippo CMS to Strapi and architecting a custom CMS on top of it",
+			"Built 10+ internal applications used across the organisation",
 			"Move from paid service to open source",
 			"Improve user experience in all Apps",
 			"Part of Frontend Monthly meeting to guide Akelius Frontend libraries",
+			"Mentoring and training new frontend team members",
 		],
 		color: "from-blue-500 to-cyan-500",
 	},
@@ -87,10 +102,11 @@ const experiences: Experience[] = [
 		role: "Frontend Developer",
 		period: "October 2018 - March 2019",
 		duration: "6 Months",
-		description: "Building Advertising Bidding platform using",
+		description:
+			"Crealytics builds performance marketing technology for online retailers, with a focus on paid search and shopping campaign automation.",
 		projects: [],
 		skills: ["React"],
-		achievements: ["Building Advertising Bidding platform using"],
+		achievements: ["Built the frontend of an advertising bidding platform"],
 		color: "from-purple-500 to-pink-500",
 	},
 	{
@@ -99,8 +115,8 @@ const experiences: Experience[] = [
 			url: "https://www.linkedin.com/company/ladenzeile-gmbh/",
 		},
 		role: "Senior Frontend Developer",
-		period: "June 2015 - September 2019",
-		duration: "4 Years",
+		period: "June 2015 - September 2018",
+		duration: "3+ Years",
 		description:
 			"Visual Meta operates comparison shopping portals under the brands LadenZeile and ShopAlike across Europe, aggregating millions of offers from various online retailers. ",
 		projects: [],
@@ -138,8 +154,11 @@ const experiences: Experience[] = [
 		description:
 			"Mobinets provides next-generation OSS (Operations Support Systems) software solutions designed to automate, consolidate, and optimize telecom network operations for global service providers.",
 		projects: [],
-		skills: ["Java", "Oracle (11g)", "SVN", "GIT", "SVN"],
-		achievements: ["Manage team.", "Using Java for building OSS"],
+		skills: ["Java", "Oracle (9i/10g)", "SQL", "JavaScript", "SVN", "GIT"],
+		achievements: [
+			"Leading a team of 3 developers",
+			"Using Java for building OSS solutions for global telecom operators",
+		],
 		color: "from-green-500 to-emerald-500",
 	},
 	{
@@ -150,8 +169,16 @@ const experiences: Experience[] = [
 		period: "March 2003 – June 2005, July 2007 – June 2013",
 		duration: "8 Years",
 		description:
-			"Building a billing system for a water companies and electricity companies.",
+			"Softnet is an IT and software consultancy specialised in large-scale enterprise applications, E-Government solutions and complex system integrations for the Syrian public and industrial sectors.",
 		projects: [
+			{
+				text: "E-Banking Gateway — a core pillar of the national E-Government initiative",
+				skills: ["Java", "Oracle", "J2EE"],
+			},
+			{
+				text: "Digital Archive System — showcased at CEBIT in Germany",
+				skills: ["Java", "Oracle", "JSP"],
+			},
 			{ text: "Water Billing System", skills: ["Java", "SVN", "GIT"] },
 			{ text: "Electricity Billing System", skills: ["Java", "SVN", "GIT"] },
 		],
@@ -172,6 +199,8 @@ const experiences: Experience[] = [
 			"CSV",
 		],
 		achievements: [
+			"Leading the E-Banking Gateway project for the national E-Government initiative",
+			"Directing the Digital Archive System, showcased at CEBIT in Germany",
 			"Building first version of the billing system using Swing + Applet",
 			"Migrating to web using JSF",
 			"keep the tools updated",
@@ -236,7 +265,7 @@ export function Timeline() {
 					<div className="space-y-12">
 						{experiences.map((exp, index) => (
 							<motion.div
-								key={exp.company}
+								key={exp.company.name}
 								initial={{ opacity: 0, y: 50 }}
 								whileInView={{ opacity: 1, y: 0 }}
 								viewport={{ once: true, margin: "-100px" }}
@@ -275,7 +304,20 @@ export function Timeline() {
 										{/* Header */}
 										<div className="mb-6">
 											<div className="mb-4">
-												<h3 className="text-white mb-1">{exp.company.name}</h3>
+												<h3 className="text-white mb-1">
+													{exp.company.url ? (
+														<a
+															href={exp.company.url}
+															target="_blank"
+															rel="noopener noreferrer"
+															className="hover:text-blue-400 transition-colors"
+														>
+															{exp.company.name}
+														</a>
+													) : (
+														exp.company.name
+													)}
+												</h3>
 												<p className="text-slate-300 font-medium">{exp.role}</p>
 												<div className="flex items-center gap-2 mt-2 text-sm text-slate-400">
 													<Calendar className="w-4 h-4" />
@@ -290,35 +332,37 @@ export function Timeline() {
 										</div>
 
 										{/* Projects */}
-										<div className="mb-6">
-											<div className="flex items-center gap-2 mb-3">
-												<Briefcase className="w-4 h-4 text-blue-400" />
-												<h4 className="text-white">Key Projects</h4>
+										{exp.projects.length > 0 && (
+											<div className="mb-6">
+												<div className="flex items-center gap-2 mb-3">
+													<Briefcase className="w-4 h-4 text-blue-400" />
+													<h4 className="text-white">Key Projects</h4>
+												</div>
+												<ul className="space-y-2">
+													{exp.projects.map((project) => (
+														<li
+															key={`${project.text}`}
+															className="text-slate-300 text-sm flex items-start gap-2"
+														>
+															<span className="text-blue-400">▹</span>
+															<span className="[&_a]:text-blue-400 [&_a]:font-medium [&_a]:underline [&_a]:underline-offset-4 [&_a]:decoration-blue-400/30 hover:[&_a]:decoration-blue-400 hover:[&_a]:text-blue-300 transition-all [&_a:after]:content-['_↗'] [&_a:after]:ml-0.5 [&_a:after]:text-xs [&_a:after]:opacity-70">
+																{project.url ? (
+																	<a
+																		href={project.url}
+																		target="_blank"
+																		rel="noopener noreferrer"
+																	>
+																		{project.text}
+																	</a>
+																) : (
+																	project.text
+																)}
+															</span>
+														</li>
+													))}
+												</ul>
 											</div>
-											<ul className="space-y-2">
-												{exp.projects.map((project) => (
-													<li
-														key={`${project.text}`}
-														className="text-slate-300 text-sm flex items-start gap-2"
-													>
-														<span className="text-blue-400">▹</span>
-														<span className="[&_a]:text-blue-400 [&_a]:font-medium [&_a]:underline [&_a]:underline-offset-4 [&_a]:decoration-blue-400/30 hover:[&_a]:decoration-blue-400 hover:[&_a]:text-blue-300 transition-all [&_a:after]:content-['_↗'] [&_a:after]:ml-0.5 [&_a:after]:text-xs [&_a:after]:opacity-70">
-															{project.url ? (
-																<a
-																	href={project.url}
-																	target="_blank"
-																	rel="noopener noreferrer"
-																>
-																	{project.text}
-																</a>
-															) : (
-																project.text
-															)}
-														</span>
-													</li>
-												))}
-											</ul>
-										</div>
+										)}
 
 										{/* Skills */}
 										<div className="mb-6">
@@ -387,7 +431,9 @@ export function Timeline() {
 							className="bg-slate-800 rounded-xl p-6 text-center border border-slate-700"
 							style={{ transformStyle: "preserve-3d" }}
 						>
-							<div className="text-blue-400 mb-2">{stat.value}</div>
+							<div className="text-blue-400 mb-2 text-3xl font-bold tabular-nums">
+								{stat.value}
+							</div>
 							<div className="text-slate-400 text-sm">{stat.label}</div>
 						</motion.div>
 					))}

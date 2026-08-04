@@ -1,6 +1,8 @@
 import {
+	Bot,
 	Code2,
 	Database,
+	FileCode2,
 	Globe,
 	Layers,
 	Server,
@@ -10,15 +12,30 @@ import { motion } from "motion/react";
 
 const skillCategories = [
 	{
+		title: "AI-Assisted Engineering",
+		icon: Bot,
+		skills: [
+			"Claude Code",
+			"Agentic Workflows",
+			"Custom Agents",
+			"Skills",
+			"MCP",
+			"LLM API Integration",
+			"Prompt Engineering",
+		],
+		color: "violet",
+	},
+	{
 		title: "Frontend Development",
 		icon: Globe,
 		skills: [
 			"React",
-			"Angular",
+			"Angular (2–20)",
 			"Tanstack",
 			"TypeScript",
 			"Tailwind CSS",
 			"Daisyui",
+			"Angular Material",
 			"GraphQL",
 		],
 		color: "blue",
@@ -26,13 +43,28 @@ const skillCategories = [
 	{
 		title: "Backend Development",
 		icon: Server,
-		skills: ["Node.js", "Tanstack", ".NET", "Express", "Python", "Java", "C#"],
+		skills: [
+			"Node.js",
+			"Express",
+			"NestJS",
+			"Java",
+			"Spring Boot",
+			"C#",
+			".NET",
+			"Python",
+		],
 		color: "purple",
+	},
+	{
+		title: "Content Management",
+		icon: FileCode2,
+		skills: ["Strapi CMS", "Payload CMS", "Headless Architecture", "Hippo CMS"],
+		color: "rose",
 	},
 	{
 		title: "Database & Storage",
 		icon: Database,
-		skills: ["PostgreSQL", "MongoDB", "Redis", "MySQL"],
+		skills: ["PostgreSQL", "MongoDB", "MySQL", "Oracle", "Redis"],
 		color: "green",
 	},
 	{
@@ -42,20 +74,30 @@ const skillCategories = [
 			"Docker",
 			"Docker Compose",
 			"Kubernetes",
-			"CI/CD",
-			"Terraform",
+			"Helm",
+			"NGINX",
+			"Jenkins",
 			"GitHub Actions",
+			"Terraform",
+			"Azure",
+			"Dokploy",
 		],
 		color: "orange",
 	},
 	{
 		title: "Mobile Development",
 		icon: Smartphone,
-		skills: ["Capacitorjs", "Progressive Web Apps"],
+		skills: [
+			"Capacitorjs",
+			"Ionic",
+			"trapeze.dev",
+			"Progressive Web Apps",
+			"Play Store & App Store releases",
+		],
 		color: "pink",
 	},
 	{
-		title: "Architecture & Design",
+		title: "Architecture & Craft",
 		icon: Code2,
 		skills: [
 			"Microservices",
@@ -64,14 +106,18 @@ const skillCategories = [
 			"SOLID",
 			"Design Patterns",
 			"API Design",
+			"Playwright",
+			"Figma",
 		],
 		color: "cyan",
 	},
 ];
 
 const colorClasses = {
+	violet: "from-violet-500 to-fuchsia-600",
 	blue: "from-blue-500 to-blue-600",
 	purple: "from-purple-500 to-purple-600",
+	rose: "from-rose-500 to-rose-600",
 	green: "from-green-500 to-green-600",
 	orange: "from-orange-500 to-orange-600",
 	pink: "from-pink-500 to-pink-600",
@@ -92,8 +138,8 @@ export function Skills() {
 					<h2 className="mb-4 text-slate-900">Technical Expertise</h2>
 					<p className="text-slate-600 max-w-2xl mx-auto">
 						Two decades of hands-on experience across the entire technology
-						stack, delivering enterprise-grade solutions and leading technical
-						innovation.
+						stack — from enterprise-grade Angular and Java systems to today's
+						React, TanStack and AI-agentic development workflows.
 					</p>
 				</motion.div>
 
@@ -140,18 +186,18 @@ export function Skills() {
 				>
 					<div className="inline-block bg-white rounded-xl p-8 shadow-lg">
 						<div className="grid grid-cols-3 gap-8">
-							<div>
-								<div className="text-blue-600 mb-2">23+</div>
-								<div className="text-slate-600">Years Experience</div>
-							</div>
-							<div>
-								<div className="text-blue-600 mb-2">100+</div>
-								<div className="text-slate-600">Projects Delivered</div>
-							</div>
-							<div>
-								<div className="text-blue-600 mb-2">50+</div>
-								<div className="text-slate-600">Technologies Mastered</div>
-							</div>
+							{[
+								{ value: "23+", label: "Years Experience" },
+								{ value: "100+", label: "Projects Delivered" },
+								{ value: "50+", label: "Technologies Mastered" },
+							].map((stat) => (
+								<div key={stat.label}>
+									<div className="text-blue-600 mb-2 text-3xl md:text-4xl font-bold tabular-nums">
+										{stat.value}
+									</div>
+									<div className="text-slate-600 text-sm">{stat.label}</div>
+								</div>
+							))}
 						</div>
 					</div>
 				</motion.div>

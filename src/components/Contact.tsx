@@ -1,5 +1,5 @@
 import { motion } from "motion/react";
-import { socialLinks } from "@/config";
+import { emailInfo, socialLinks } from "@/config";
 
 export function Contact() {
 	return (
@@ -23,12 +23,13 @@ export function Contact() {
 				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto mb-16">
 					{socialLinks.map((link, index) => {
 						const Icon = link.icon;
+						const isExternal = link.url.startsWith("http");
 						return (
 							<motion.a
 								key={link.name}
 								href={link.url}
-								target="_blank"
-								rel="noopener noreferrer"
+								target={isExternal ? "_blank" : undefined}
+								rel={isExternal ? "noopener noreferrer" : undefined}
 								initial={{ opacity: 0, y: 20 }}
 								whileInView={{ opacity: 1, y: 0 }}
 								viewport={{ once: true }}
@@ -40,7 +41,7 @@ export function Contact() {
 									<div
 										className={`${link.color} w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform`}
 									>
-										<Icon className="w-6 h-6 text-white" />
+										<Icon className="w-6 h-6 text-white" aria-hidden="true" />
 									</div>
 									<div>
 										<h3 className="text-white mb-1">{link.name}</h3>
@@ -67,7 +68,7 @@ export function Contact() {
 							projects.
 						</p>
 						<a
-							href="mailto:hkashlan@gmail.com"
+							href={emailInfo.url}
 							className="inline-block px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
 						>
 							Start a Conversation

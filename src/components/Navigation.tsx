@@ -1,6 +1,9 @@
 import { Menu, X } from "lucide-react";
-import { motion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState } from "react";
+import { siteName } from "@/config";
+
+const hireHref = "#contact";
 
 export function Navigation() {
 	const [isScrolled, setIsScrolled] = useState(false);
@@ -16,10 +19,12 @@ export function Navigation() {
 	}, []);
 
 	const navItems = [
-		{ label: "Home", href: "#" },
+		{ label: "Home", href: "#top" },
 		{ label: "Skills", href: "#skills" },
+		{ label: "How I Work", href: "#working-style" },
 		{ label: "Timeline", href: "#timeline" },
 		{ label: "Projects", href: "#projects" },
+		{ label: "Education", href: "#education" },
 		{ label: "Contact", href: "#contact" },
 	];
 
@@ -28,6 +33,7 @@ export function Navigation() {
 			initial={{ y: -100 }}
 			animate={{ y: 0 }}
 			transition={{ duration: 0.6 }}
+			aria-label="Main"
 			className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
 				isScrolled
 					? "bg-slate-900/95 backdrop-blur-sm shadow-lg"
@@ -37,7 +43,8 @@ export function Navigation() {
 			<div className="container mx-auto px-6">
 				<div className="flex items-center justify-between h-16">
 					<motion.a
-						href="/#"
+						href="#top"
+						aria-label={`${siteName} — back to top`}
 						className="text-white z-50"
 						whileHover={{ scale: 1.05 }}
 					>
@@ -67,6 +74,9 @@ export function Navigation() {
 					<button
 						type="button"
 						className="md:hidden text-white z-50"
+						aria-expanded={isMobileMenuOpen}
+						aria-controls="mobile-menu"
+						aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
 						onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
 					>
 						{isMobileMenuOpen ? <X /> : <Menu />}
@@ -74,38 +84,38 @@ export function Navigation() {
 				</div>
 			</div>
 
-			{/* Mobile Menu */}
-			{isMobileMenuOpen && (
-				<motion.div
-					initial={{ opacity: 0, y: -20 }}
-					animate={{ opacity: 1, y: 0 }}
-					exit={{ opacity: 0, y: -20 }}
-					className="md:hidden bg-slate-900 border-t border-slate-800"
-				>
-					<div className="container mx-auto px-6 py-4 flex flex-col gap-4">
-						{navItems.map((item) => (
+			{/* Mobile Menu — AnimatePresence is what makes the `exit` prop run. */}
+			<AnimatePresence>
+				{isMobileMenuOpen && (
+					<motion.div
+						id="mobile-menu"
+						initial={{ opacity: 0, y: -20 }}
+						animate={{ opacity: 1, y: 0 }}
+						exit={{ opacity: 0, y: -20 }}
+						className="md:hidden bg-slate-900 border-t border-slate-800"
+					>
+						<div className="container mx-auto px-6 py-4 flex flex-col gap-4">
+							{navItems.map((item) => (
+								<a
+									key={item.label}
+									href={item.href}
+									className="text-slate-300 hover:text-white transition-colors py-2"
+									onClick={() => setIsMobileMenuOpen(false)}
+								>
+									{item.label}
+								</a>
+							))}
 							<a
-								key={item.label}
-								href={item.href}
-								className="text-slate-300 hover:text-white transition-colors py-2"
+								href={hireHref}
+								className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-center"
 								onClick={() => setIsMobileMenuOpen(false)}
 							>
-								{item.label}
+								Hire Me
 							</a>
-						))}
-						<button
-							type="button"
-							className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-center"
-							onClick={() => {
-								setIsMobileMenuOpen(false);
-								window.location.hash = "contact";
-							}}
-						>
-							Hire Me
-						</button>
-					</div>
-				</motion.div>
-			)}
+						</div>
+					</motion.div>
+				)}
+			</AnimatePresence>
 		</motion.nav>
 	);
 }
