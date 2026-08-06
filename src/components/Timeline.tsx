@@ -1,6 +1,17 @@
-import { Award, Briefcase, Calendar } from "lucide-react";
-import { motion, useScroll, useTransform } from "motion/react";
-import { useRef } from "react";
+import {
+	Award,
+	Briefcase,
+	Calendar,
+	ChevronDown,
+	Filter,
+	X,
+} from "lucide-react";
+import { AnimatePresence, motion } from "motion/react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
+
+/** The page is server-rendered, where a layout effect would only warn. */
+const useIsomorphicLayoutEffect =
+	typeof window === "undefined" ? useEffect : useLayoutEffect;
 
 type Experience = {
 	company: { name: string; url?: string };
@@ -15,6 +26,87 @@ type Experience = {
 };
 
 const experiences: Experience[] = [
+	{
+		company: {
+			name: "Independent Projects",
+			url: "https://github.com/hkashlan",
+		},
+		role: "AI & Full-Stack Engineer",
+		period: "2024 - Present",
+		duration: "Alongside full-time work",
+		description:
+			"Products I design, build and ship on my own time — AI-assisted end to end, from the first Claude Code session to the production deployment.",
+		projects: [
+			{
+				url: "https://myclinic-sy.com/en",
+				text: "MyClinic — clinic management platform for practices across Iraq, Syria and the wider region",
+				skills: [
+					"Claude Code",
+					"MCP",
+					"React",
+					"TanStack",
+					"TypeScript",
+					"Tailwind CSS",
+					"PostgreSQL",
+				],
+			},
+			{
+				url: "https://management.myclinic-sy.com/",
+				text: "MyClinic Management — multi-tenant back office with a double-entry accounting ledger",
+				skills: [
+					"Claude Code",
+					"React",
+					"TanStack",
+					"TypeScript",
+					"Tailwind CSS",
+					"PostgreSQL",
+				],
+			},
+			{
+				url: "https://hkashlan.github.io/altitudevision/",
+				text: "AltitudeVision — bilingual product site for an AI voice-agent service",
+				skills: [
+					"React",
+					"TanStack",
+					"TypeScript",
+					"NestJS",
+					"Payload CMS",
+					"DaisyUI",
+					"Tailwind CSS",
+				],
+			},
+			{
+				url: "https://hkashlan.github.io/",
+				text: "This portfolio site",
+				skills: ["TanStack", "React", "TypeScript", "Tailwind CSS", "Vite"],
+			},
+		],
+		skills: [
+			"Claude Code",
+			"MCP",
+			"Custom Agents",
+			"React",
+			"TanStack",
+			"TypeScript",
+			"Tailwind CSS",
+			"DaisyUI",
+			"NestJS",
+			"Payload CMS",
+			"Node.js",
+			"PostgreSQL",
+			"Docker",
+			"Dokploy",
+			"Vite",
+			"Figma",
+		],
+		achievements: [
+			"Shipping production products solo — design, frontend, API, database and deployment",
+			"AI-assisted end to end: Claude Code, MCP servers and custom agents drive a large share of the implementation",
+			"Built an Arabic-first bilingual (AR/EN) UI with full RTL support",
+			"Implemented a double-entry accounting ledger — chart of accounts, journal entries, fiscal periods, trial balance, P&L and balance sheet",
+		],
+		color: "from-violet-500 to-fuchsia-600",
+	},
 	{
 		company: {
 			name: "Akelius Technology",
@@ -209,19 +301,235 @@ const experiences: Experience[] = [
 	},
 ];
 
-export function Timeline() {
-	const containerRef = useRef<HTMLDivElement>(null);
-	const { scrollYProgress } = useScroll({
-		target: containerRef,
-		offset: ["start end", "end start"],
-	});
+/** Skills are typed by hand across entries, so match them case-insensitively. */
+const skillKey = (skill: string) => skill.trim().toLowerCase();
 
-	const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
+type SkillUsage = {
+	key: string;
+	/** First spelling encountered, walking the timeline from the most recent role. */
+	label: string;
+	companies: string[];
+};
+
+const skillIndex = new Map<string, SkillUsage>();
+for (const exp of experiences) {
+	for (const skill of [
+		...exp.skills,
+		...exp.projects.flatMap((project) => project.skills),
+	]) {
+		const key = skillKey(skill);
+		let usage = skillIndex.get(key);
+		if (!usage) {
+			usage = { key, label: skill, companies: [] };
+			skillIndex.set(key, usage);
+		}
+		if (!usage.companies.includes(exp.company.name)) {
+			usage.companies.push(exp.company.name);
+		}
+	}
+}
+
+/** Listed in the order they appear in the timeline data — most recent role first. */
+const allSkills = [...skillIndex.values()];
+
+/**
+ * Buckets for the filter bar. Skills are listed by the spelling used above;
+ * anything not listed here lands in "Other", so the bar never drops a skill.
+ */
+const skillGroups: Array<{ name: string; skills: string[] }> = [
+	{ name: "AI", skills: ["Claude Code", "MCP", "Custom Agents"] },
+	{
+		name: "Frontend",
+		skills: [
+			"Angular",
+			"React",
+			"TanStack",
+			"TypeScript",
+			"Tailwind CSS",
+			"DaisyUI",
+			"JavaScript",
+			"jQuery",
+			"HTML",
+			"CSS",
+			"JSP",
+			"Swing",
+			"Applet",
+		],
+	},
+	{ name: "Mobile", skills: ["Capacitorjs", "Ionic"] },
+	{
+		name: "Backend & API",
+		skills: [
+			"Node.js",
+			"Express.js",
+			"NestJS",
+			"Payload CMS",
+			"Java",
+			"J2EE",
+			"Java Persisteence API",
+			"Hibernetate ORM",
+			"JBoss",
+			"GraphQL",
+			"Strapi",
+		],
+	},
+	{
+		name: "Data",
+		skills: [
+			"PostgreSQL",
+			"MongoDB",
+			"MySQL",
+			"Oracle",
+			"Oracle (9i/10g)",
+			"Oracle (10g, 11G)",
+			"SQL",
+			"CSV",
+		],
+	},
+	{
+		name: "DevOps & Cloud",
+		skills: [
+			"Docker",
+			"Docker Compose",
+			"Kubernetes",
+			"Jenkins",
+			"Terraform",
+			"Azure",
+			"Dokploy",
+		],
+	},
+	{
+		name: "Tooling",
+		skills: [
+			"Vite",
+			"Figma",
+			"Git",
+			"SVN",
+			"Bitbucket",
+			"Jira",
+			"Confluence",
+			"JasperReports",
+			"iReport Designer",
+		],
+	},
+];
+
+const OTHER_GROUP = "Other";
+
+const groupByKey = new Map<string, string>();
+for (const group of skillGroups) {
+	for (const skill of group.skills) {
+		groupByKey.set(skillKey(skill), group.name);
+	}
+}
+
+const groupedSkills = [...skillGroups.map((group) => group.name), OTHER_GROUP]
+	.map((name) => ({
+		name,
+		skills: allSkills.filter(
+			(skill) => (groupByKey.get(skill.key) ?? OTHER_GROUP) === name,
+		),
+	}))
+	.filter((group) => group.skills.length > 0);
+
+/** How many skills a group shows before the "show all" toggle. */
+const COLLAPSED_GROUP_SIZE = 6;
+
+const hasCollapsedSkills = groupedSkills.some(
+	(group) => group.skills.length > COLLAPSED_GROUP_SIZE,
+);
+
+const hasSkill = (skill: string, key: string) => skillKey(skill) === key;
+
+const experienceUsesSkill = (exp: Experience, key: string) =>
+	exp.skills.some((skill) => hasSkill(skill, key)) ||
+	exp.projects.some((project) =>
+		project.skills.some((skill) => hasSkill(skill, key)),
+	);
+
+export function Timeline() {
+	const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
+	const [showAllSkills, setShowAllSkills] = useState(false);
+
+	const filterRef = useRef<HTMLDivElement>(null);
+	const anchor = useRef<{ element: Element; top: number } | null>(null);
+
+	/**
+	 * Filtering adds or removes whole cards, so the page gets shorter or taller
+	 * and the browser shifts (or clamps) the scroll position under the user.
+	 * Remember where the clicked element sat in the viewport, then put it back.
+	 */
+	const rememberScrollAnchor = (element: Element | null) => {
+		const target = element ?? filterRef.current;
+		anchor.current = target
+			? { element: target, top: target.getBoundingClientRect().top }
+			: null;
+	};
+
+	useIsomorphicLayoutEffect(() => {
+		const previous = anchor.current;
+		anchor.current = null;
+		if (!previous) return;
+
+		// A chip inside a card that just got filtered out is gone — fall back to
+		// the filter bar, which is above every card and never unmounts.
+		const element = previous.element.isConnected
+			? previous.element
+			: filterRef.current;
+		if (!element) return;
+
+		const delta = element.getBoundingClientRect().top - previous.top;
+		if (Math.abs(delta) > 1) window.scrollBy(0, delta);
+	}, [selectedKeys, showAllSkills]);
+
+	const selected = selectedKeys
+		.map((key) => skillIndex.get(key))
+		.filter((usage) => usage !== undefined);
+	const isSelected = (key: string) => selectedKeys.includes(key);
+
+	/** A role matches when it used any of the selected skills. */
+	const visibleExperiences =
+		selected.length === 0
+			? experiences
+			: experiences.filter((exp) =>
+					selected.some((skill) => experienceUsesSkill(exp, skill.key)),
+				);
+
+	/** Collapsed groups still show whatever is currently selected. */
+	const chipsFor = (group: (typeof groupedSkills)[number]) => {
+		if (showAllSkills) return group.skills;
+		const shown = group.skills.slice(0, COLLAPSED_GROUP_SIZE);
+		return [
+			...shown,
+			...group.skills.filter(
+				(skill) => !shown.includes(skill) && isSelected(skill.key),
+			),
+		];
+	};
+
+	const toggleSkill = (key: string) =>
+		setSelectedKeys((current) =>
+			current.includes(key)
+				? current.filter((selectedKey) => selectedKey !== key)
+				: [...current, key],
+		);
+
+	const toggleGroup = (keys: string[]) =>
+		setSelectedKeys((current) =>
+			keys.every((key) => current.includes(key))
+				? current.filter((key) => !keys.includes(key))
+				: [...current, ...keys.filter((key) => !current.includes(key))],
+		);
+
+	/** Which of the selected skills a project used — drives its highlight badges. */
+	const matchedProjectSkills = (projectSkills: string[]) =>
+		selected.filter((skill) =>
+			projectSkills.some((projectSkill) => hasSkill(projectSkill, skill.key)),
+		);
 
 	return (
 		<section
 			id="timeline"
-			ref={containerRef}
 			className="py-20 bg-slate-900 overflow-hidden relative"
 		>
 			{/* Background 3D Grid Effect */}
@@ -240,10 +548,7 @@ export function Timeline() {
 				/>
 			</div>
 
-			<motion.div
-				style={{ opacity }}
-				className="container mx-auto px-6 relative z-10"
-			>
+			<div className="container mx-auto px-6 relative z-10">
 				<motion.div
 					initial={{ opacity: 0, y: 20 }}
 					whileInView={{ opacity: 1, y: 0 }}
@@ -258,44 +563,184 @@ export function Timeline() {
 					</p>
 				</motion.div>
 
-				<div className="max-w-6xl mx-auto relative">
-					{/* Central Timeline Line */}
-					<div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gradient-to-b from-blue-500 via-purple-500 to-green-500 hidden lg:block" />
+				{/* Skill Filter */}
+				<motion.div
+					ref={filterRef}
+					initial={{ opacity: 0, y: 20 }}
+					whileInView={{ opacity: 1, y: 0 }}
+					viewport={{ once: true }}
+					transition={{ duration: 0.6 }}
+					className="max-w-4xl mx-auto mb-12"
+				>
+					<div className="flex items-center justify-center gap-2 mb-4 text-slate-400 text-sm">
+						<Filter className="w-4 h-4" />
+						<span>Pick one or more technologies to see where I used them</span>
+					</div>
 
-					<div className="space-y-12">
-						{experiences.map((exp, index) => (
-							<motion.div
-								key={exp.company.name}
-								initial={{ opacity: 0, y: 50 }}
-								whileInView={{ opacity: 1, y: 0 }}
-								viewport={{ once: true, margin: "-100px" }}
-								transition={{ delay: index * 0.2, duration: 0.6 }}
-								className={`relative lg:pr-1/2 lg:pl-0`}
-							>
-								{/* Timeline Dot */}
-								<div className="absolute left-1/2 transform -translate-x-1/2 -translate-y-4 hidden lg:block z-20">
-									<motion.div
-										className={`w-6 h-6 rounded-full bg-gradient-to-br ${exp.color} border-4 border-slate-900`}
-										whileHover={{ scale: 1.5 }}
-										transition={{ type: "spring", stiffness: 300 }}
-									/>
-								</div>
-
-								{/* 3D Card */}
-								<motion.div
-									className="relative group perspective-1000"
-									whileHover={{ scale: 1.02 }}
-									transition={{ type: "spring", stiffness: 300 }}
+					<div className="space-y-3">
+						{groupedSkills.map((group) => {
+							const groupKeys = group.skills.map((skill) => skill.key);
+							const wholeGroupSelected = groupKeys.every((key) =>
+								isSelected(key),
+							);
+							return (
+								<div
+									key={group.name}
+									className="flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-4"
 								>
-									<div
-										className={`bg-slate-800 rounded-2xl p-8 shadow-2xl border border-slate-700 transition-all duration-300 ${
-											index % 2 === 0 ? "lg:mr-12" : "lg:ml-12"
-										}`}
-										style={{
-											transformStyle: "preserve-3d",
-											transform: "translateZ(0)",
+									<button
+										type="button"
+										onClick={(event) => {
+											rememberScrollAnchor(event.currentTarget);
+											toggleGroup(groupKeys);
 										}}
+										aria-pressed={wholeGroupSelected}
+										title={
+											wholeGroupSelected
+												? `Remove all ${group.name} filters`
+												: `Filter by everything in ${group.name}`
+										}
+										className={`sm:w-32 sm:text-right shrink-0 text-xs uppercase tracking-wider transition-colors cursor-pointer ${
+											wholeGroupSelected
+												? "text-blue-400"
+												: "text-slate-500 hover:text-white"
+										}`}
 									>
+										{group.name}
+									</button>
+
+									<div className="flex flex-wrap gap-2 flex-1">
+										{chipsFor(group).map((skill) => {
+											const active = isSelected(skill.key);
+											return (
+												<motion.button
+													key={skill.key}
+													type="button"
+													layout
+													onClick={(event) => {
+														rememberScrollAnchor(event.currentTarget);
+														toggleSkill(skill.key);
+													}}
+													aria-pressed={active}
+													whileHover={{ scale: 1.05, y: -2 }}
+													whileTap={{ scale: 0.97 }}
+													className={`px-3 py-1 rounded-full text-xs border transition-colors cursor-pointer ${
+														active
+															? "bg-blue-500 border-blue-400 text-white"
+															: "bg-slate-800 border-slate-700 text-slate-300 hover:border-blue-400 hover:text-white"
+													}`}
+												>
+													{skill.label}
+													<span
+														className={`ml-1.5 tabular-nums ${
+															active ? "text-blue-100" : "text-slate-500"
+														}`}
+													>
+														{skill.companies.length}
+													</span>
+												</motion.button>
+											);
+										})}
+									</div>
+								</div>
+							);
+						})}
+					</div>
+
+					{hasCollapsedSkills && (
+						<div className="flex justify-center mt-4">
+							<button
+								type="button"
+								onClick={(event) => {
+									rememberScrollAnchor(event.currentTarget);
+									setShowAllSkills((current) => !current);
+								}}
+								className="px-3 py-1 rounded-full text-xs border border-dashed border-slate-600 text-slate-400 hover:text-white hover:border-slate-400 transition-colors cursor-pointer flex items-center gap-1"
+							>
+								{showAllSkills
+									? "Show less"
+									: `Show all ${allSkills.length} technologies`}
+								<ChevronDown
+									className={`w-3 h-3 transition-transform ${
+										showAllSkills ? "rotate-180" : ""
+									}`}
+								/>
+							</button>
+						</div>
+					)}
+
+					<AnimatePresence initial={false}>
+						{selected.length > 0 && (
+							<motion.div
+								initial={{ opacity: 0, height: 0 }}
+								animate={{ opacity: 1, height: "auto" }}
+								exit={{ opacity: 0, height: 0 }}
+								className="overflow-hidden"
+							>
+								<div className="mt-6 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-sm text-slate-300">
+									<span>
+										<span className="text-white font-medium">
+											{selected.map((skill) => skill.label).join(" / ")}
+										</span>{" "}
+										used at {visibleExperiences.length}{" "}
+										{visibleExperiences.length === 1 ? "company" : "companies"}:{" "}
+										<span className="text-blue-400">
+											{visibleExperiences
+												.map((exp) => exp.company.name)
+												.join(", ")}
+										</span>
+									</span>
+
+									<button
+										type="button"
+										onClick={(event) => {
+											rememberScrollAnchor(event.currentTarget);
+											setSelectedKeys([]);
+										}}
+										className="flex items-center gap-1 px-2 py-1 rounded-full border border-slate-700 text-slate-400 text-xs hover:text-white hover:border-slate-500 transition-colors cursor-pointer"
+									>
+										<X className="w-3 h-3" />
+										Clear {selected.length > 1 ? "filters" : "filter"}
+									</button>
+								</div>
+							</motion.div>
+						)}
+					</AnimatePresence>
+				</motion.div>
+
+				{/* Our own scroll restore handles filter changes — leaving the
+				    browser's scroll anchoring on as well would fight it. */}
+				<div
+					className="max-w-4xl mx-auto relative"
+					style={{ overflowAnchor: "none" }}
+				>
+					{/* Timeline Rail — one straight line, cards read top to bottom. */}
+					<div
+						className="absolute left-[7px] sm:left-[9px] top-2 bottom-2 w-px bg-slate-700"
+						aria-hidden="true"
+					/>
+
+					<div className="space-y-10">
+						<AnimatePresence mode="popLayout">
+							{visibleExperiences.map((exp) => (
+								<motion.div
+									key={exp.company.name}
+									layout
+									initial={{ opacity: 0, y: 24 }}
+									whileInView={{ opacity: 1, y: 0 }}
+									exit={{ opacity: 0, scale: 0.98 }}
+									viewport={{ once: true, margin: "-80px" }}
+									transition={{ duration: 0.4 }}
+									className="relative pl-8 sm:pl-12"
+								>
+									{/* Timeline Dot — aligned with the card header. */}
+									<div
+										className={`absolute left-0 top-8 w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-gradient-to-br ${exp.color} border-[3px] border-slate-900 ring-1 ring-slate-700`}
+										aria-hidden="true"
+									/>
+
+									{/* Card */}
+									<div className="relative group bg-slate-800 rounded-2xl p-6 sm:p-8 shadow-xl border border-slate-700 hover:border-slate-500 transition-colors duration-300">
 										{/* Gradient Accent */}
 										<div
 											className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${exp.color} rounded-t-2xl`}
@@ -303,27 +748,34 @@ export function Timeline() {
 
 										{/* Header */}
 										<div className="mb-6">
-											<div className="mb-4">
-												<h3 className="text-white mb-1">
-													{exp.company.url ? (
-														<a
-															href={exp.company.url}
-															target="_blank"
-															rel="noopener noreferrer"
-															className="hover:text-blue-400 transition-colors"
-														>
-															{exp.company.name}
-														</a>
-													) : (
-														exp.company.name
-													)}
-												</h3>
-												<p className="text-slate-300 font-medium">{exp.role}</p>
-												<div className="flex items-center gap-2 mt-2 text-sm text-slate-400">
-													<Calendar className="w-4 h-4" />
-													<span>{exp.period}</span>
-													<span className="text-slate-600">•</span>
-													<span>{exp.duration}</span>
+											<div className="mb-4 flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
+												<div>
+													<h3 className="text-white mb-1">
+														{exp.company.url ? (
+															<a
+																href={exp.company.url}
+																target="_blank"
+																rel="noopener noreferrer"
+																className="hover:text-blue-400 transition-colors"
+															>
+																{exp.company.name}
+															</a>
+														) : (
+															exp.company.name
+														)}
+													</h3>
+													<p className="text-slate-300 font-medium">
+														{exp.role}
+													</p>
+												</div>
+												<div className="flex sm:flex-col sm:items-end items-center gap-2 sm:gap-1 shrink-0 text-sm text-slate-400">
+													<span className="flex items-center gap-2">
+														<Calendar className="w-4 h-4" />
+														{exp.period}
+													</span>
+													<span className="text-slate-500 text-xs">
+														{exp.duration}
+													</span>
 												</div>
 											</div>
 											<p className="text-slate-400 text-sm">
@@ -339,27 +791,44 @@ export function Timeline() {
 													<h4 className="text-white">Key Projects</h4>
 												</div>
 												<ul className="space-y-2">
-													{exp.projects.map((project) => (
-														<li
-															key={`${project.text}`}
-															className="text-slate-300 text-sm flex items-start gap-2"
-														>
-															<span className="text-blue-400">▹</span>
-															<span className="[&_a]:text-blue-400 [&_a]:font-medium [&_a]:underline [&_a]:underline-offset-4 [&_a]:decoration-blue-400/30 hover:[&_a]:decoration-blue-400 hover:[&_a]:text-blue-300 transition-all [&_a:after]:content-['_↗'] [&_a:after]:ml-0.5 [&_a:after]:text-xs [&_a:after]:opacity-70">
-																{project.url ? (
-																	<a
-																		href={project.url}
-																		target="_blank"
-																		rel="noopener noreferrer"
-																	>
-																		{project.text}
-																	</a>
-																) : (
-																	project.text
-																)}
-															</span>
-														</li>
-													))}
+													{exp.projects.map((project) => {
+														const matches = matchedProjectSkills(
+															project.skills,
+														);
+														return (
+															<li
+																key={`${project.text}`}
+																className={`text-slate-300 text-sm flex items-start gap-2 transition-opacity ${
+																	selected.length > 0 && matches.length === 0
+																		? "opacity-40"
+																		: "opacity-100"
+																}`}
+															>
+																<span className="text-blue-400">▹</span>
+																<span className="[&_a]:text-blue-400 [&_a]:font-medium [&_a]:underline [&_a]:underline-offset-4 [&_a]:decoration-blue-400/30 hover:[&_a]:decoration-blue-400 hover:[&_a]:text-blue-300 transition-all [&_a:after]:content-['_↗'] [&_a:after]:ml-0.5 [&_a:after]:text-xs [&_a:after]:opacity-70">
+																	{project.url ? (
+																		<a
+																			href={project.url}
+																			target="_blank"
+																			rel="noopener noreferrer"
+																		>
+																			{project.text}
+																		</a>
+																	) : (
+																		project.text
+																	)}
+																	{matches.map((skill) => (
+																		<span
+																			key={skill.key}
+																			className="ml-2 align-middle px-2 py-0.5 rounded-full bg-blue-500/20 border border-blue-400/40 text-blue-300 text-[10px] whitespace-nowrap"
+																		>
+																			{skill.label}
+																		</span>
+																	))}
+																</span>
+															</li>
+														);
+													})}
 												</ul>
 											</div>
 										)}
@@ -370,16 +839,34 @@ export function Timeline() {
 												Technologies Used
 											</h4>
 											<div className="flex flex-wrap gap-2">
-												{exp.skills.map((skill) => (
-													<motion.span
-														key={skill}
-														whileHover={{ scale: 1.1, y: -2 }}
-														className={`px-3 py-1 bg-gradient-to-r ${exp.color} bg-opacity-20 text-white rounded-full text-xs border border-slate-600`}
-														style={{ transform: "translateZ(10px)" }}
-													>
-														{skill}
-													</motion.span>
-												))}
+												{exp.skills.map((skill) => {
+													const active = isSelected(skillKey(skill));
+													return (
+														<motion.button
+															key={skill}
+															type="button"
+															onClick={(event) => {
+																rememberScrollAnchor(event.currentTarget);
+																toggleSkill(skillKey(skill));
+															}}
+															aria-pressed={active}
+															title={
+																active
+																	? `Remove the ${skill} filter`
+																	: `Add ${skill} to the filter`
+															}
+															whileHover={{ scale: 1.1, y: -2 }}
+															whileTap={{ scale: 0.97 }}
+															className={`px-3 py-1 bg-gradient-to-r ${exp.color} bg-opacity-20 text-white rounded-full text-xs border cursor-pointer transition-all ${
+																active
+																	? "border-white ring-2 ring-white/60"
+																	: `border-slate-600 ${selected.length > 0 ? "opacity-50 hover:opacity-100" : ""}`
+															}`}
+														>
+															{skill}
+														</motion.button>
+													);
+												})}
 											</div>
 										</div>
 
@@ -401,13 +888,10 @@ export function Timeline() {
 												))}
 											</ul>
 										</div>
-
-										{/* 3D Hover Effect Overlay */}
-										<div className="absolute inset-0 bg-gradient-to-br from-blue-500/0 to-purple-500/0 group-hover:from-blue-500/5 group-hover:to-purple-500/5 rounded-2xl transition-all duration-300 pointer-events-none" />
 									</div>
 								</motion.div>
-							</motion.div>
-						))}
+							))}
+						</AnimatePresence>
 					</div>
 				</div>
 
@@ -438,7 +922,7 @@ export function Timeline() {
 						</motion.div>
 					))}
 				</motion.div>
-			</motion.div>
+			</div>
 		</section>
 	);
 }

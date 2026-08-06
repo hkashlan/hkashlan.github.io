@@ -21,8 +21,8 @@ export function Navigation() {
 	const navItems = [
 		{ label: "Home", href: "#top" },
 		{ label: "Skills", href: "#skills" },
-		{ label: "How I Work", href: "#working-style" },
 		{ label: "Timeline", href: "#timeline" },
+		{ label: "How I Work", href: "#working-style" },
 		{ label: "Projects", href: "#projects" },
 		{ label: "Education", href: "#education" },
 		{ label: "Contact", href: "#contact" },

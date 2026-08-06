@@ -26,8 +26,8 @@ function RouteComponent() {
 			<main id="main">
 				<Hero />
 				<Skills />
-				<WorkingStyle />
 				<Timeline />
+				<WorkingStyle />
 				<Projects />
 				<Education />
 				<Contact />
